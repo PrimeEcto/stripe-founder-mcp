@@ -6,6 +6,8 @@
 
 The Stripe co-pilot for indie SaaS founders. Ask your AI about MRR, churn, failed payments, and at-risk customers in plain English — and get answers shaped around the questions a founder actually asks, not raw API dumps.
 
+> **Prefer a managed hosted version?** Install in one click from [mcpize.com/mcp/stripe-founder](https://mcpize.com/mcp/stripe-founder). Free tier includes 200 requests per month.
+
 ## The problem
 
 Stripe's API is exhaustive. The Dashboard answers most questions but requires clicking through ten screens. Existing Stripe MCPs are thin CRUD wrappers — they let an AI list charges or retrieve a customer object, but they don't answer founder questions.
@@ -44,13 +46,27 @@ No SQL, no dashboard clicking, no manual API calls.
 
 ## Install
 
+You have two options. Pick whichever fits your workflow.
+
+### Option A — Hosted (recommended)
+
+The fastest way to get started. No Node setup, no self-hosting, no infrastructure.
+
+**[Install via MCPize →](https://mcpize.com/mcp/stripe-founder)**
+
+You provide your Stripe key, MCPize handles the rest. Free tier includes 200 requests per month with no expiration. Pro tier is $14/month for 5,000 requests with predictable overage pricing.
+
+### Option B — Self-hosted
+
+Run it yourself, free forever, full control.
+
 **Requires Node 20 or later.**
 
 **1. Create a Stripe restricted key** with read-only access at [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys). The MCP needs read access to your billing data: customers, subscriptions, charges, invoices, payment intents, products, prices, and disputes.
 
 **2. Add to your MCP client config:**
 
-### Claude Desktop
+#### Claude Desktop
 
 Config file: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
 
@@ -68,7 +84,7 @@ Config file: `~/Library/Application Support/Claude/claude_desktop_config.json` (
 }
 ```
 
-### Cursor
+#### Cursor
 
 Config file: `~/.cursor/mcp.json`
 
@@ -86,7 +102,7 @@ Config file: `~/.cursor/mcp.json`
 }
 ```
 
-### Claude Code
+#### Claude Code
 
 ```bash
 claude mcp add stripe-founder -- npx -y stripe-founder-mcp
@@ -94,7 +110,7 @@ claude mcp add stripe-founder -- npx -y stripe-founder-mcp
 
 Then set `STRIPE_API_KEY=rk_live_...` in your shell environment or project `.env` file.
 
-### Self-hosted / development
+#### Development from source
 
 ```bash
 git clone https://github.com/PrimeEcto/stripe-founder-mcp.git
@@ -134,10 +150,6 @@ All time-based tools accept human-readable date ranges: `"last_30_days"`, `"this
 - **Restricted keys recommended.** Use `rk_live_...` scoped to read access only, not your full secret key.
 - **Test mode auto-detected.** If your key starts with `sk_test_` or `rk_test_`, every tool response includes `stripe_mode: "test"` so you never confuse environments.
 - **No telemetry.** No data leaves your machine beyond the calls to Stripe's API. No analytics, no external logging.
-
-## Hosted version
-
-A managed hosted version is coming to [MCPize](https://mcpize.com) — you'll provide your Stripe key, they handle the infrastructure. Watch this README for the listing link.
 
 ## Contributing
 
