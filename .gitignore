@@ -1,0 +1,27 @@
+node_modules/
+dist/
+coverage/
+.vitest/
+
+# Dev-only scratch scripts (may contain hardcoded keys)
+scripts/test_all_tools.mjs
+
+.env
+.env.local
+.env.*.local
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+.cache/
+.npm/
+.eslintcache

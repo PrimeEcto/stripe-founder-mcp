@@ -1,0 +1,57 @@
+{
+  "name": "stripe-founder-mcp",
+  "version": "0.1.0",
+  "description": "The Stripe co-pilot for indie SaaS founders. Ask your AI about MRR, churn, failed payments, and at-risk customers via MCP.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "stripe-founder-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run --dir tests/unit",
+    "test:watch": "vitest --dir tests/unit",
+    "test:integration": "vitest run --dir tests/integration",
+    "prepublishOnly": "npm run typecheck && npm run lint && npm test && npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "stripe",
+    "saas",
+    "analytics",
+    "indie-hackers",
+    "claude",
+    "cursor",
+    "founder"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "fastmcp": "^3.0.0",
+    "stripe": "^17.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
+  }
+}
