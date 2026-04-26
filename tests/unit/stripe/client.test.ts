@@ -3,9 +3,60 @@ import Stripe from "stripe";
 import {
   createReadOnlyHttpClient,
   createStripeClientContext,
+  configureStripeClientContextFromEnvironment,
   detectStripeModeFromKey,
+  getStripeClientContext,
+  resetStripeClientContextForTests,
   validateStripeApiKey
 } from "../../../src/stripe/client.js";
+
+describe("environment-backed stripe context", () => {
+  const originalStripeApiKey = process.env.STRIPE_API_KEY;
+  const originalCacheTtlSeconds = process.env.CACHE_TTL_SECONDS;
+  const originalMaxListResults = process.env.MAX_LIST_RESULTS;
+
+  afterEach(() => {
+    resetStripeClientContextForTests();
+
+    if (originalStripeApiKey === undefined) {
+      delete process.env.STRIPE_API_KEY;
+    } else {
+      process.env.STRIPE_API_KEY = originalStripeApiKey;
+    }
+
+    if (originalCacheTtlSeconds === undefined) {
+      delete process.env.CACHE_TTL_SECONDS;
+    } else {
+      process.env.CACHE_TTL_SECONDS = originalCacheTtlSeconds;
+    }
+
+    if (originalMaxListResults === undefined) {
+      delete process.env.MAX_LIST_RESULTS;
+    } else {
+      process.env.MAX_LIST_RESULTS = originalMaxListResults;
+    }
+  });
+
+  it("lazily configures from environment on first access", () => {
+    process.env.STRIPE_API_KEY = "sk_test_123";
+    process.env.CACHE_TTL_SECONDS = "12";
+    process.env.MAX_LIST_RESULTS = "34";
+
+    const context = getStripeClientContext();
+
+    expect(context.mode).toBe("test");
+    expect(context.cacheTtlSeconds).toBe(12);
+    expect(context.maxListResults).toBe(34);
+  });
+
+  it("throws a helpful error when tool execution starts without a key", () => {
+    delete process.env.STRIPE_API_KEY;
+
+    expect(() => configureStripeClientContextFromEnvironment()).toThrow(
+      "STRIPE_API_KEY is required to execute Stripe tools."
+    );
+  });
+});
 
 describe("validateStripeApiKey", () => {
   it("accepts restricted and secret Stripe keys", () => {

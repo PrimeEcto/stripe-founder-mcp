@@ -23,15 +23,13 @@ function readNumberEnv(name: string, fallbackValue: number): number {
 
 export async function main(): Promise<void> {
   const apiKey = process.env.STRIPE_API_KEY;
-  if (!apiKey) {
-    throw new Error("STRIPE_API_KEY is required.");
+  if (apiKey) {
+    configureStripeClientContext({
+      apiKey,
+      cacheTtlSeconds: readNumberEnv("CACHE_TTL_SECONDS", 60),
+      maxListResults: readNumberEnv("MAX_LIST_RESULTS", 1000)
+    });
   }
-
-  configureStripeClientContext({
-    apiKey,
-    cacheTtlSeconds: readNumberEnv("CACHE_TTL_SECONDS", 60),
-    maxListResults: readNumberEnv("MAX_LIST_RESULTS", 1000)
-  });
 
   const server = createServer();
   const transportType = process.env.MCP_TRANSPORT === "httpStream" ? "httpStream" : "stdio";

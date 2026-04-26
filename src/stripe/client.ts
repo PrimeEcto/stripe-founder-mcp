@@ -4,8 +4,24 @@ import type { StripeClientContext, StripeMode, StripeRuntimeOptions } from "../l
 import { buildCacheKey, TinyLruCache } from "./cache.js";
 
 const RECOGNIZED_KEY_PREFIXES = [/^rk_(test|live)_/, /^sk_(test|live)_/];
+const DEFAULT_CACHE_TTL_SECONDS = 60;
+const DEFAULT_MAX_LIST_RESULTS = 1000;
 
 let activeStripeClientContext: StripeClientContext | undefined;
+
+function readNumberEnv(name: string, fallbackValue: number): number {
+  const rawValue = process.env[name];
+  if (!rawValue) {
+    return fallbackValue;
+  }
+
+  const parsed = Number.parseInt(rawValue, 10);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new Error(`${name} must be a non-negative integer.`);
+  }
+
+  return parsed;
+}
 
 export function detectStripeModeFromKey(apiKey: string): StripeMode {
   if (apiKey.startsWith("rk_test_") || apiKey.startsWith("sk_test_")) {
@@ -90,9 +106,22 @@ export function configureStripeClientContext(options: StripeRuntimeOptions): Str
   return activeStripeClientContext;
 }
 
+export function configureStripeClientContextFromEnvironment(): StripeClientContext {
+  const apiKey = process.env.STRIPE_API_KEY;
+  if (!apiKey) {
+    throw new Error("STRIPE_API_KEY is required to execute Stripe tools.");
+  }
+
+  return configureStripeClientContext({
+    apiKey,
+    cacheTtlSeconds: readNumberEnv("CACHE_TTL_SECONDS", DEFAULT_CACHE_TTL_SECONDS),
+    maxListResults: readNumberEnv("MAX_LIST_RESULTS", DEFAULT_MAX_LIST_RESULTS)
+  });
+}
+
 export function getStripeClientContext(): StripeClientContext {
   if (!activeStripeClientContext) {
-    throw new Error("Stripe client context has not been configured.");
+    return configureStripeClientContextFromEnvironment();
   }
 
   return activeStripeClientContext;

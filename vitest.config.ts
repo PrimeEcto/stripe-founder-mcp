@@ -4,7 +4,8 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
+    include: ["tests/unit/**/*.test.ts"],
     passWithNoTests: false,
-    workspace: "./vitest.workspace.ts"
+    testTimeout: 30_000
   }
 });
