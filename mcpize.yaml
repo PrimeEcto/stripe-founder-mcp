@@ -1,0 +1,27 @@
+# MCPize Configuration
+# Docs: https://mcpize.com/docs/mcpize-yaml
+
+version: 1
+
+name: "Stripe Founder MCP"
+slug: "stripe-founder"
+
+runtime: typescript
+entry: "src/index.ts"
+
+build:
+  install: "npx -y stripe-founder-mcp"
+  command: "npm run build"
+
+start:
+  type: stdio
+  command: "node"
+  args:
+    - "dist/index.js"
+
+bridge:
+  mode: stdio
+
+credentials:
+  - name: "undefined"
+    description: "Stripe API key (restricted read-only rk_live_... recommended)"
