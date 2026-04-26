@@ -1,5 +1,6 @@
 # stripe-founder-mcp
 
+[![MCPize](https://mcpize.com/badge/@joshuanunezisthebest/stripe-founder)](https://mcpize.com/mcp/stripe-founder)
 [![npm version](https://img.shields.io/npm/v/stripe-founder-mcp.svg)](https://www.npmjs.com/package/stripe-founder-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org)
@@ -103,6 +104,16 @@ npm install
 cp .env.example .env   # then fill in your STRIPE_API_KEY
 npm run dev
 ```
+
+## Connect via MCPize
+
+Use this MCP server instantly with no local installation:
+
+```bash
+npx -y mcpize connect @joshuanunezisthebest/stripe-founder --client claude
+```
+
+Or connect at: **https://mcpize.com/mcp/stripe-founder**
 
 ## Tools
 
